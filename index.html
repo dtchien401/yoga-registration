@@ -24,7 +24,7 @@
       font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       color: var(--ink);
       background:
-        linear-gradient(90deg, rgba(255,255,255,.38) 0%, rgba(255,255,255,.26) 48%, rgba(255,255,255,.14) 100%),
+        linear-gradient(90deg, rgba(255,255,255,.44) 0%, rgba(255,255,255,.24) 48%, rgba(255,255,255,.12) 100%),
         url('./background.png');
       background-size: cover;
       background-position: center center;
@@ -45,21 +45,21 @@
     .page {
       min-height: 100svh;
       position: relative;
-      padding: clamp(18px, 2.5vw, 42px);
+      padding: clamp(22px, 2.6vw, 44px);
       isolation: isolate;
     }
 
     .brand-logo {
       position: absolute;
-      top: clamp(24px, 5vh, 56px);
-      left: clamp(24px, 5vw, 86px);
+      top: clamp(26px, 4.6vh, 52px);
+      left: clamp(34px, 5vw, 88px);
       display: flex;
       align-items: center;
       z-index: 20;
     }
 
     .brand-logo img {
-      width: clamp(220px, 22vw, 420px);
+      width: clamp(210px, 20vw, 360px);
       height: auto;
       object-fit: contain;
       filter: drop-shadow(0 12px 24px rgba(15,23,42,.10));
@@ -72,8 +72,8 @@
 
     .lang-switch {
       position: absolute;
-      top: clamp(28px, 5vh, 64px);
-      right: clamp(24px, 4vw, 80px);
+      top: clamp(30px, 4.8vh, 58px);
+      right: clamp(28px, 4.2vw, 76px);
       display: flex;
       gap: 6px;
       padding: 6px;
@@ -112,10 +112,152 @@
       max-width: 1500px;
       margin: 0 auto;
       display: grid;
-      grid-template-columns: 1fr minmax(500px, 560px) .55fr;
+      grid-template-columns: minmax(540px, 620px) minmax(460px, 520px);
+      justify-content: center;
+      align-items: start;
+      gap: clamp(46px, 5.5vw, 92px);
+      padding-top: clamp(118px, 13vh, 156px);
+    }
+
+
+
+    .hero-context {
+      width: 100%;
+      max-width: 620px;
+      min-height: auto;
+      display: flex;
+      align-items: flex-start;
+      justify-self: start;
+      padding-top: clamp(82px, 8vh, 100px);
+    }
+
+    .event-copy {
+      width: 100%;
+      padding: clamp(8px, 1vw, 16px);
+      border-radius: 0;
+      background: transparent;
+      border: 0;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
+      box-shadow: none;
+      text-align: center;
+    }
+
+    .event-kicker {
+      display: flex;
       align-items: center;
-      gap: clamp(14px, 2vw, 30px);
-      padding-top: clamp(92px, 10vh, 150px);
+      gap: 12px;
+      color: rgba(58,82,70,.54);
+      font-weight: 800;
+      letter-spacing: .34em;
+      font-size: clamp(19px, 1.65vw, 30px);
+      text-transform: uppercase;
+      margin-bottom: 12px;
+    }
+
+    .event-kicker::before,
+    .event-kicker::after {
+      content: "";
+      height: 2px;
+      flex: 1;
+      max-width: 58px;
+      background: currentColor;
+      opacity: .8;
+    }
+
+    .event-title {
+      color: rgba(70,90,76,.64);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(92px, 8.5vw, 156px);
+      line-height: .78;
+      letter-spacing: .03em;
+      font-weight: 500;
+      margin: 0;
+    }
+
+    .event-day {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-top: 16px;
+      color: rgba(70,90,76,.66);
+      font-weight: 800;
+      letter-spacing: .34em;
+      font-size: clamp(34px, 3.4vw, 58px);
+      text-transform: uppercase;
+    }
+
+    .event-day::before,
+    .event-day::after {
+      content: "";
+      height: 2px;
+      flex: 1;
+      background: #6c9c78;
+      opacity: .55;
+    }
+
+    .event-theme {
+      margin-top: 24px;
+      color: rgba(31,41,55,.66);
+      font-size: clamp(19px, 1.35vw, 25px);
+      line-height: 1.25;
+      font-weight: 600;
+    }
+
+    .event-icons {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .event-icon-card {
+      min-height: 94px;
+      border-radius: 0;
+      background: transparent;
+      border: 0;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 12px 8px;
+    }
+
+    .event-icon-badge {
+      width: 46px;
+      height: 46px;
+      border-radius: 999px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, #84a95b, #4fa3a6);
+      color: white;
+      margin-bottom: 8px;
+      box-shadow: 0 14px 26px rgba(47,117,75,.18);
+    }
+
+    .event-icon-label {
+      font-weight: 800;
+      color: #475569;
+      font-size: 15px;
+    }
+
+    .event-date {
+      margin-top: 52px;
+      padding-top: 0;
+      border-top: 0;
+      text-align: center;
+      color: #2f754b;
+      font-family: Georgia, "Times New Roman", serif;
+      letter-spacing: .16em;
+      font-size: clamp(24px, 2.3vw, 34px);
+      font-weight: 700;
+    }
+
+    .event-hashtag {
+      margin-top: 8px;
+      text-align: center;
+      color: #475569;
+      font-size: clamp(15px, 1.1vw, 19px);
+      font-weight: 600;
     }
 
     .left-space { min-height: 560px; }
@@ -123,9 +265,9 @@
 
     .form-zone {
       width: 100%;
-      max-width: 560px;
-      justify-self: center;
-      transform: translateY(-4px);
+      max-width: 520px;
+      justify-self: start;
+      transform: translateY(0);
     }
 
     .top-tabs {
@@ -146,7 +288,7 @@
     }
 
     .top-tabs button {
-      min-height: 58px;
+      min-height: 52px;
       border-radius: 22px;
       font-weight: 900;
       transition: all .18s ease;
@@ -171,7 +313,7 @@
       -webkit-backdrop-filter: blur(30px);
       border-radius: 32px;
       box-shadow: 0 40px 100px rgba(15,23,42,.14);
-      padding: clamp(24px, 2vw, 32px);
+      padding: clamp(24px, 1.8vw, 30px) clamp(28px, 2.2vw, 36px);
       position: relative;
       z-index: 2;
     }
@@ -213,7 +355,9 @@
 
     @media (max-width: 1200px) {
       .main-stage {
-        grid-template-columns: .9fr minmax(480px, 540px) .4fr;
+        grid-template-columns: minmax(460px, 540px) minmax(430px, 500px);
+        gap: 42px;
+        justify-content: center;
       }
 
       .brand-logo {
@@ -257,12 +401,20 @@
         display: block;
         max-width: 560px;
         min-height: auto;
-        padding-top: 0;
+        padding-top: 18px;
       }
 
-      .left-space,
-      .right-space {
+      .left-space {
         display: none;
+      }
+
+      .right-space {
+        display: block;
+      }
+
+      .hero-context {
+        min-height: auto;
+        padding-top: 0;
       }
 
       .form-zone {
@@ -322,8 +474,38 @@
     </div>
 
     <main class="main-stage">
-      <div class="left-space"></div>
+      <div class="hero-context">
+        <section class="event-copy" aria-label="International Yoga Day Event Context">
+          <div class="event-kicker">International</div>
+          <h1 class="event-title">YOGA</h1>
+          <div class="event-day">Day</div>
+          <p class="event-theme" data-i18n="eventTheme">Yoga for One Earth, One Health</p>
 
+          <div class="event-icons">
+            <div class="event-icon-card">
+              <div class="event-icon-badge">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5Z"/><path d="M12 9v4l-3 5"/><path d="M12 13l3 5"/><path d="M8 20h8"/><path d="M6 13c1.6 1.2 3.6 1.8 6 1.8s4.4-.6 6-1.8"/></svg>
+              </div>
+              <div class="event-icon-label">Connect</div>
+            </div>
+            <div class="event-icon-card">
+              <div class="event-icon-badge">
+                <svg width="29" height="29" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8Z"/><path d="M4 12h4l2-4 4 8 2-4h4"/></svg>
+              </div>
+              <div class="event-icon-label">Balance</div>
+            </div>
+            <div class="event-icon-card">
+              <div class="event-icon-badge">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-11V5l-8-3-8 3v6c0 7 8 11 8 11Z"/><path d="M8 12c2.5 0 4-1.5 4-4 0 2.5 1.5 4 4 4-2.5 0-4 1.5-4 4 0-2.5-1.5-4-4-4Z"/></svg>
+              </div>
+              <div class="event-icon-label">Inspire</div>
+            </div>
+          </div>
+
+          <div class="event-date">21 JUNE</div>
+          <div class="event-hashtag">#InternationalYogaDay</div>
+        </section>
+      </div>
       <div class="form-zone">
         <div class="top-tabs">
           <button type="button" id="btnRegister" onclick="showTab('register')" class="tab-active px-4 py-3">
@@ -481,7 +663,6 @@
         </div>
       </div>
 
-      <div class="right-space"></div>
     </main>
   </div>
 
@@ -500,6 +681,7 @@
       heroTag: "Sự kiện cộng đồng miễn phí",
       heroTitle: "Yoga cho bạn. Năng lượng cho cuộc sống.",
       heroDesc: "Đăng ký tham gia sự kiện Yoga cộng đồng nhân ngày International Yoga Day. Cùng thở, cùng chuyển động, cùng kết nối năng lượng tích cực.",
+      eventTheme: "Yoga for One Earth, One Health",
       eventDay: "Ngày sự kiện",
       allLevels: "Mọi trình độ",
       free: "Miễn phí",
@@ -531,6 +713,7 @@
       heroTag: "Free community event",
       heroTitle: "Celebrate Yoga. Celebrate You.",
       heroDesc: "Register for our community Yoga event celebrating International Yoga Day. Move, breathe, and connect with positive energy.",
+      eventTheme: "Yoga for One Earth, One Health",
       eventDay: "Event Day",
       allLevels: "All levels",
       free: "Free",
