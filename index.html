@@ -1,362 +1,182 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>International Yoga Day Registration</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-  <style>
-    body { font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
-    .glass { background: rgba(255,255,255,.86); backdrop-filter: blur(18px); }
-    .tab-active { background:#111827; color:white; }
-  </style>
-</head>
-<body class="min-h-screen bg-gradient-to-br from-rose-50 via-orange-50 to-amber-50 text-slate-900">
+from pathlib import Path
+import zipfile, re
 
-  <header class="max-w-6xl mx-auto px-4 py-5 flex items-center justify-between">
-    <div class="flex items-center gap-3">
-      <img src="logo.png" onerror="this.style.display='none'" class="w-12 h-12 object-contain" />
-      <div>
-        <div class="text-xs uppercase tracking-[0.3em] text-rose-600 font-bold">California Fitness & Yoga</div>
-        <h1 class="text-xl md:text-2xl font-black">International Yoga Day</h1>
+# Extract latest zip
+src_zip = Path("/mnt/data/yoga_day_landing_page_with_sheet_id.zip")
+work_dir = Path("/mnt/data/yoga_day_landing_bilingual")
+work_dir.mkdir(exist_ok=True)
+
+with zipfile.ZipFile(src_zip, "r") as z:
+    z.extractall(work_dir)
+
+html_path = work_dir / "index.html"
+html = html_path.read_text(encoding="utf-8")
+
+api_url = "https://script.google.com/macros/s/AKfycbxHuqKs4kHn7O7_3-okjuLT4V7lLi-hOUDa5gYUsObiyfMTxx9GSWsRgvPh4obJP4J1yQ/exec"
+html = html.replace('const API_URL = "PASTE_YOUR_GOOGLE_APPS_SCRIPT_WEB_APP_URL_HERE";', f'const API_URL = "{api_url}";')
+
+# Add language CSS
+html = html.replace(
+"""    .tab-active { background:#111827; color:white; }
+  </style>""",
+"""    .tab-active { background:#111827; color:white; }
+    .lang-en { display: none; }
+    body.lang-en-active .lang-vi { display: none; }
+    body.lang-en-active .lang-en { display: inline; }
+    body.lang-en-active div.lang-en,
+    body.lang-en-active p.lang-en,
+    body.lang-en-active h1.lang-en,
+    body.lang-en-active h2.lang-en,
+    body.lang-en-active h3.lang-en,
+    body.lang-en-active h4.lang-en,
+    body.lang-en-active label.lang-en,
+    body.lang-en-active button.lang-en { display: block; }
+    body.lang-en-active .inline-lang-en { display: inline; }
+    .inline-lang-en { display: none; }
+    body.lang-en-active .inline-lang-vi { display: none; }
+  </style>"""
+)
+
+# Add language switch in header
+html = html.replace(
+"""    <div class="hidden md:block text-sm font-semibold text-slate-600">21 June • Move • Breathe • Connect</div>
+  </header>""",
+"""    <div class="flex items-center gap-3">
+      <div class="hidden md:block text-sm font-semibold text-slate-600">21 June • Move • Breathe • Connect</div>
+      <div class="rounded-2xl bg-white shadow-sm p-1 flex gap-1">
+        <button id="langViBtn" onclick="setLang('vi')" class="rounded-xl px-3 py-2 text-xs font-black bg-slate-950 text-white">VI</button>
+        <button id="langEnBtn" onclick="setLang('en')" class="rounded-xl px-3 py-2 text-xs font-black text-slate-600">EN</button>
       </div>
     </div>
-    <div class="hidden md:block text-sm font-semibold text-slate-600">21 June • Move • Breathe • Connect</div>
-  </header>
+  </header>"""
+)
 
-  <main class="max-w-6xl mx-auto px-4 pb-12">
-    <section class="grid lg:grid-cols-2 gap-6 items-stretch">
-      <div class="rounded-[2rem] p-8 bg-slate-950 text-white shadow-2xl overflow-hidden relative">
-        <div class="absolute -right-20 -top-20 w-72 h-72 bg-rose-500/30 rounded-full blur-3xl"></div>
-        <div class="absolute -left-16 bottom-0 w-64 h-64 bg-orange-400/20 rounded-full blur-3xl"></div>
-        <div class="relative z-10">
-          <p class="text-rose-300 font-bold uppercase tracking-[0.25em] text-xs">Free community event</p>
+# Replace big section text manually with bilingual spans
+html = html.replace(
+"""<p class="text-rose-300 font-bold uppercase tracking-[0.25em] text-xs">Free community event</p>
           <h2 class="mt-4 text-4xl md:text-6xl font-black leading-tight">Celebrate Yoga. Celebrate You.</h2>
           <p class="mt-5 text-slate-300 text-lg leading-relaxed">
             Đăng ký tham gia sự kiện Yoga cộng đồng nhân ngày International Yoga Day.
             Cùng thở, cùng chuyển động, cùng kết nối năng lượng tích cực.
+          </p>""",
+"""<p class="text-rose-300 font-bold uppercase tracking-[0.25em] text-xs">
+            <span class="lang-vi">Sự kiện cộng đồng miễn phí</span><span class="lang-en">Free community event</span>
           </p>
-          <div class="grid grid-cols-3 gap-3 mt-8">
-            <div class="rounded-2xl bg-white/10 p-4">
-              <div class="text-2xl font-black">21/06</div>
-              <div class="text-xs text-slate-300">Event Day</div>
-            </div>
-            <div class="rounded-2xl bg-white/10 p-4">
-              <div class="text-2xl font-black">Yoga</div>
-              <div class="text-xs text-slate-300">All levels</div>
-            </div>
-            <div class="rounded-2xl bg-white/10 p-4">
-              <div class="text-2xl font-black">Free</div>
-              <div class="text-xs text-slate-300">Registration</div>
-            </div>
-          </div>
-        </div>
-      </div>
+          <h2 class="mt-4 text-4xl md:text-6xl font-black leading-tight">
+            <span class="lang-vi">Yoga cho bạn. Năng lượng cho cuộc sống.</span><span class="lang-en">Celebrate Yoga. Celebrate You.</span>
+          </h2>
+          <p class="mt-5 text-slate-300 text-lg leading-relaxed">
+            <span class="lang-vi">Đăng ký tham gia sự kiện Yoga cộng đồng nhân ngày International Yoga Day. Cùng thở, cùng chuyển động, cùng kết nối năng lượng tích cực.</span>
+            <span class="lang-en">Register for our community Yoga event celebrating International Yoga Day. Move, breathe, and connect with positive energy.</span>
+          </p>"""
+)
 
-      <div class="glass rounded-[2rem] shadow-xl p-4 md:p-6">
-        <div class="grid grid-cols-2 gap-2 mb-5">
-          <button id="btnRegister" onclick="showTab('register')" class="tab-active rounded-2xl px-4 py-3 font-bold">Đăng ký</button>
-          <button id="btnDashboard" onclick="showTab('dashboard')" class="rounded-2xl px-4 py-3 font-bold bg-white">Dashboard</button>
-        </div>
+# stat labels
+html = html.replace('Event Day', '<span class="lang-vi">Ngày sự kiện</span><span class="lang-en">Event Day</span>')
+html = html.replace('All levels', '<span class="lang-vi">Mọi trình độ</span><span class="lang-en">All levels</span>')
+html = html.replace('Registration', '<span class="lang-vi">Đăng ký</span><span class="lang-en">Registration</span>')
 
-        <!-- TAB 1: REGISTER -->
-        <section id="tabRegister">
-          <h3 class="text-2xl font-black mb-1">Đăng ký tham gia</h3>
-          <p class="text-sm text-slate-500 mb-5">Vui lòng điền thông tin bên dưới.</p>
+# buttons tabs
+html = html.replace('>Đăng ký</button>', '><span class="lang-vi">Đăng ký</span><span class="lang-en">Register</span></button>')
+html = html.replace('>Dashboard</button>', '><span>Dashboard</span></button>')
 
-          <form id="regForm" class="space-y-4">
-            <div>
-              <label class="text-sm font-bold">Họ tên</label>
-              <input required name="fullName" class="mt-1 w-full rounded-2xl border border-slate-200 px-4 py-3 outline-none focus:ring-2 focus:ring-rose-400" placeholder="Nguyễn Văn A">
-            </div>
+# Form labels/text
+repls = {
+    '<h3 class="text-2xl font-black mb-1">Đăng ký tham gia</h3>':
+    '<h3 class="text-2xl font-black mb-1"><span class="lang-vi">Đăng ký tham gia</span><span class="lang-en">Event Registration</span></h3>',
+    '<p class="text-sm text-slate-500 mb-5">Vui lòng điền thông tin bên dưới.</p>':
+    '<p class="text-sm text-slate-500 mb-5"><span class="lang-vi">Vui lòng điền thông tin bên dưới.</span><span class="lang-en">Please fill in your information below.</span></p>',
+    '<label class="text-sm font-bold">Họ tên</label>':
+    '<label class="text-sm font-bold"><span class="lang-vi">Họ tên</span><span class="lang-en">Full name</span></label>',
+    'placeholder="Nguyễn Văn A"':
+    'placeholder="Nguyễn Văn A / John Smith"',
+    '<label class="text-sm font-bold">Số điện thoại</label>':
+    '<label class="text-sm font-bold"><span class="lang-vi">Số điện thoại</span><span class="lang-en">Phone number</span></label>',
+    '<label class="text-sm font-bold">Mã hội viên</label>':
+    '<label class="text-sm font-bold"><span class="lang-vi">Mã hội viên</span><span class="lang-en">Member code</span></label>',
+    'placeholder="Nếu chưa có, để trống"':
+    'placeholder="Nếu chưa có, để trống / Leave blank if none"',
+    '<label class="text-sm font-bold">Giới tính</label>':
+    '<label class="text-sm font-bold"><span class="lang-vi">Giới tính</span><span class="lang-en">Gender</span></label>',
+    '<option value="">Chọn</option>':
+    '<option value="">Chọn / Select</option>',
+    '<option value="Nam">Nam</option>':
+    '<option value="Nam">Nam / Male</option>',
+    '<option value="Nữ">Nữ</option>':
+    '<option value="Nữ">Nữ / Female</option>',
+    '<option value="Khác">Khác</option>':
+    '<option value="Khác">Khác / Other</option>',
+    '<label class="text-sm font-bold">Tuổi</label>':
+    '<label class="text-sm font-bold"><span class="lang-vi">Tuổi</span><span class="lang-en">Age</span></label>',
+    'Đăng ký ngay':
+    '<span class="lang-vi">Đăng ký ngay</span><span class="lang-en">Register now</span>',
+    '<p class="text-sm text-slate-500 mb-5">Chỉ dành cho team quản lý.</p>':
+    '<p class="text-sm text-slate-500 mb-5"><span class="lang-vi">Chỉ dành cho team quản lý.</span><span class="lang-en">Management team only.</span></p>',
+    '<p class="text-sm text-slate-500">Data lấy trực tiếp từ Google Sheet.</p>':
+    '<p class="text-sm text-slate-500"><span class="lang-vi">Data lấy trực tiếp từ Google Sheet.</span><span class="lang-en">Data is loaded directly from Google Sheet.</span></p>',
+    'Latest Registrations':
+    '<span class="lang-vi">Đăng ký gần nhất</span><span class="lang-en">Latest Registrations</span>'
+}
+for a,b in repls.items():
+    html = html.replace(a,b)
 
-            <div>
-              <label class="text-sm font-bold">Số điện thoại</label>
-              <input required name="phone" inputmode="tel" class="mt-1 w-full rounded-2xl border border-slate-200 px-4 py-3 outline-none focus:ring-2 focus:ring-rose-400" placeholder="09xxxxxxxx">
-            </div>
+# JS add setLang and bilingual messages
+html = html.replace(
+"""  let genderChart, ageChart;""",
+"""  let genderChart, ageChart;
+  let currentLang = localStorage.getItem("yogaLang") || "vi";
 
-            <div>
-              <label class="text-sm font-bold">Mã hội viên</label>
-              <input name="memberCode" class="mt-1 w-full rounded-2xl border border-slate-200 px-4 py-3 outline-none focus:ring-2 focus:ring-rose-400" placeholder="Nếu chưa có, để trống">
-            </div>
-
-            <div class="grid grid-cols-2 gap-4">
-              <div>
-                <label class="text-sm font-bold">Giới tính</label>
-                <select required name="gender" class="mt-1 w-full rounded-2xl border border-slate-200 px-4 py-3 outline-none focus:ring-2 focus:ring-rose-400 bg-white">
-                  <option value="">Chọn</option>
-                  <option value="Nam">Nam</option>
-                  <option value="Nữ">Nữ</option>
-                  <option value="Khác">Khác</option>
-                </select>
-              </div>
-              <div>
-                <label class="text-sm font-bold">Tuổi</label>
-                <input required name="age" type="number" min="1" max="100" class="mt-1 w-full rounded-2xl border border-slate-200 px-4 py-3 outline-none focus:ring-2 focus:ring-rose-400" placeholder="35">
-              </div>
-            </div>
-
-            <button id="submitBtn" class="w-full rounded-2xl bg-rose-600 hover:bg-rose-700 text-white font-black py-4 shadow-lg">
-              Đăng ký ngay
-            </button>
-
-            <div id="formMsg" class="hidden rounded-2xl p-4 text-sm font-bold"></div>
-          </form>
-        </section>
-
-        <!-- TAB 2: DASHBOARD -->
-        <section id="tabDashboard" class="hidden">
-          <div id="loginBox">
-            <h3 class="text-2xl font-black mb-1">Dashboard Login</h3>
-            <p class="text-sm text-slate-500 mb-5">Chỉ dành cho team quản lý.</p>
-
-            <div class="space-y-4">
-              <div>
-                <label class="text-sm font-bold">User</label>
-                <input id="loginUser" class="mt-1 w-full rounded-2xl border border-slate-200 px-4 py-3 outline-none focus:ring-2 focus:ring-rose-400" placeholder="admin">
-              </div>
-              <div>
-                <label class="text-sm font-bold">Password</label>
-                <input id="loginPass" type="password" class="mt-1 w-full rounded-2xl border border-slate-200 px-4 py-3 outline-none focus:ring-2 focus:ring-rose-400" placeholder="••••••••">
-              </div>
-              <button onclick="login()" class="w-full rounded-2xl bg-slate-950 hover:bg-slate-800 text-white font-black py-4">Login</button>
-              <div id="loginMsg" class="hidden rounded-2xl p-4 bg-red-50 text-red-700 text-sm font-bold"></div>
-            </div>
-          </div>
-
-          <div id="dashboardBox" class="hidden">
-            <div class="flex items-start justify-between gap-4 mb-5">
-              <div>
-                <h3 class="text-2xl font-black">Registration Dashboard</h3>
-                <p class="text-sm text-slate-500">Data lấy trực tiếp từ Google Sheet.</p>
-              </div>
-              <button onclick="loadDashboard()" class="rounded-xl px-4 py-2 bg-slate-100 hover:bg-slate-200 text-sm font-bold">Refresh</button>
-            </div>
-
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-5">
-              <div class="rounded-2xl bg-white p-4 shadow-sm">
-                <div class="text-xs text-slate-500 font-bold uppercase">Total</div>
-                <div id="kpiTotal" class="text-3xl font-black">0</div>
-              </div>
-              <div class="rounded-2xl bg-white p-4 shadow-sm">
-                <div class="text-xs text-slate-500 font-bold uppercase">Male</div>
-                <div id="kpiMale" class="text-3xl font-black">0</div>
-              </div>
-              <div class="rounded-2xl bg-white p-4 shadow-sm">
-                <div class="text-xs text-slate-500 font-bold uppercase">Female</div>
-                <div id="kpiFemale" class="text-3xl font-black">0</div>
-              </div>
-              <div class="rounded-2xl bg-white p-4 shadow-sm">
-                <div class="text-xs text-slate-500 font-bold uppercase">Members</div>
-                <div id="kpiMember" class="text-3xl font-black">0</div>
-              </div>
-            </div>
-
-            <div class="space-y-4">
-              <div class="rounded-2xl bg-white p-4 shadow-sm">
-                <h4 class="font-black mb-3">Gender Mix</h4>
-                <canvas id="genderChart" height="160"></canvas>
-              </div>
-              <div class="rounded-2xl bg-white p-4 shadow-sm">
-                <h4 class="font-black mb-3">Age Group</h4>
-                <canvas id="ageChart" height="160"></canvas>
-              </div>
-            </div>
-
-            <div class="mt-5 rounded-2xl bg-white p-4 shadow-sm max-h-80 overflow-auto">
-              <h4 class="font-black mb-3">Latest Registrations</h4>
-              <table class="w-full text-sm">
-                <thead class="text-left text-slate-500">
-                  <tr>
-                    <th class="py-2">Time</th><th>Name</th><th>Phone</th><th>Member</th><th>Gender</th><th>Age</th>
-                  </tr>
-                </thead>
-                <tbody id="tableBody"></tbody>
-              </table>
-            </div>
-          </div>
-        </section>
-
-      </div>
-    </section>
-  </main>
-
-<script>
-  // 1) Dán Google Apps Script Web App URL vào đây sau khi deploy.
-  const API_URL = "https://script.google.com/macros/s/AKfycbxHuqKs4kHn7O7_3-okjuLT4V7lLi-hOUDa5gYUsObiyfMTxx9GSWsRgvPh4obJP4J1yQ/exec";
-
-  // 2) Login dashboard đơn giản. Có thể đổi tại đây.
-  const DASHBOARD_USER = "admin";
-  const DASHBOARD_PASSWORD = "CaliLife";
-
-  let genderChart, ageChart;
-
-  function showTab(tab) {
-    document.getElementById("tabRegister").classList.toggle("hidden", tab !== "register");
-    document.getElementById("tabDashboard").classList.toggle("hidden", tab !== "dashboard");
-
-    document.getElementById("btnRegister").className = tab === "register"
-      ? "tab-active rounded-2xl px-4 py-3 font-bold"
-      : "rounded-2xl px-4 py-3 font-bold bg-white";
-    document.getElementById("btnDashboard").className = tab === "dashboard"
-      ? "tab-active rounded-2xl px-4 py-3 font-bold"
-      : "rounded-2xl px-4 py-3 font-bold bg-white";
+  function t(vi, en) {
+    return currentLang === "en" ? en : vi;
   }
 
-  function showMessage(elId, text, ok=true) {
-    const el = document.getElementById(elId);
-    el.textContent = text;
-    el.className = "rounded-2xl p-4 text-sm font-bold " + (ok ? "bg-green-50 text-green-700" : "bg-red-50 text-red-700");
-    el.classList.remove("hidden");
-  }
+  function setLang(lang) {
+    currentLang = lang;
+    localStorage.setItem("yogaLang", lang);
+    document.body.classList.toggle("lang-en-active", lang === "en");
 
-  document.getElementById("regForm").addEventListener("submit", async (e) => {
-    e.preventDefault();
+    const viBtn = document.getElementById("langViBtn");
+    const enBtn = document.getElementById("langEnBtn");
 
-    if (!API_URL || API_URL.includes("PASTE_YOUR")) {
-      showMessage("formMsg", "Chưa cấu hình API_URL trong file HTML.", false);
-      return;
-    }
-
-    const btn = document.getElementById("submitBtn");
-    btn.disabled = true;
-    btn.textContent = "Đang gửi...";
-
-    const form = new FormData(e.target);
-    const payload = {
-      action: "register",
-      fullName: form.get("fullName").trim(),
-      phone: form.get("phone").trim(),
-      memberCode: form.get("memberCode").trim(),
-      gender: form.get("gender"),
-      age: form.get("age")
-    };
-
-    try {
-      const res = await fetch(API_URL, {
-        method: "POST",
-        body: JSON.stringify(payload)
-      });
-      const data = await res.json();
-
-      if (data.ok) {
-        e.target.reset();
-        showMessage("formMsg", "Đăng ký thành công. Cảm ơn bạn!");
-      } else {
-        showMessage("formMsg", data.message || "Không gửi được đăng ký.", false);
-      }
-    } catch (err) {
-      showMessage("formMsg", "Lỗi kết nối Google Sheet. Vui lòng kiểm tra API URL/deployment.", false);
-    } finally {
-      btn.disabled = false;
-      btn.textContent = "Đăng ký ngay";
-    }
-  });
-
-  function login() {
-    const u = document.getElementById("loginUser").value.trim();
-    const p = document.getElementById("loginPass").value.trim();
-
-    if (u === DASHBOARD_USER && p === DASHBOARD_PASSWORD) {
-      document.getElementById("loginBox").classList.add("hidden");
-      document.getElementById("dashboardBox").classList.remove("hidden");
-      loadDashboard();
+    if (lang === "vi") {
+      viBtn.className = "rounded-xl px-3 py-2 text-xs font-black bg-slate-950 text-white";
+      enBtn.className = "rounded-xl px-3 py-2 text-xs font-black text-slate-600";
     } else {
-      showMessage("loginMsg", "Sai user hoặc password.", false);
+      enBtn.className = "rounded-xl px-3 py-2 text-xs font-black bg-slate-950 text-white";
+      viBtn.className = "rounded-xl px-3 py-2 text-xs font-black text-slate-600";
     }
   }
 
-  async function loadDashboard() {
-    if (!API_URL || API_URL.includes("PASTE_YOUR")) {
-      alert("Chưa cấu hình API_URL trong file HTML.");
-      return;
-    }
+  document.addEventListener("DOMContentLoaded", () => setLang(currentLang));"""
+)
 
-    const res = await fetch(API_URL + "?action=list");
-    const data = await res.json();
-    const rows = data.rows || [];
+# Replace messages/buttons in JS
+html = html.replace('"Chưa cấu hình API_URL trong file HTML."', 't("Chưa cấu hình API_URL trong file HTML.", "API_URL is not configured in the HTML file.")')
+html = html.replace('btn.textContent = "Đang gửi...";', 'btn.textContent = t("Đang gửi...", "Submitting...");')
+html = html.replace('"Đăng ký thành công. Cảm ơn bạn!"', 't("Đăng ký thành công. Cảm ơn bạn!", "Registration successful. Thank you!")')
+html = html.replace('"Không gửi được đăng ký."', 't("Không gửi được đăng ký.", "Could not submit registration.")')
+html = html.replace('"Lỗi kết nối Google Sheet. Vui lòng kiểm tra API URL/deployment."', 't("Lỗi kết nối Google Sheet. Vui lòng kiểm tra API URL/deployment.", "Google Sheet connection error. Please check the API URL/deployment.")')
+html = html.replace('btn.textContent = "Đăng ký ngay";', 'btn.innerHTML = \'<span class="lang-vi">Đăng ký ngay</span><span class="lang-en">Register now</span>\'; setLang(currentLang);')
+html = html.replace('"Sai user hoặc password."', 't("Sai user hoặc password.", "Incorrect user or password.")')
+html = html.replace('alert("Chưa cấu hình API_URL trong file HTML.");', 'alert(t("Chưa cấu hình API_URL trong file HTML.", "API_URL is not configured in the HTML file."));')
 
-    const total = rows.length;
-    const male = rows.filter(r => r.gender === "Nam").length;
-    const female = rows.filter(r => r.gender === "Nữ").length;
-    const members = rows.filter(r => String(r.memberCode || "").trim()).length;
+html_path.write_text(html, encoding="utf-8")
 
-    document.getElementById("kpiTotal").textContent = total;
-    document.getElementById("kpiMale").textContent = male;
-    document.getElementById("kpiFemale").textContent = female;
-    document.getElementById("kpiMember").textContent = members;
+# Update README
+readme_path = work_dir / "README.txt"
+readme = readme_path.read_text(encoding="utf-8")
+readme += f"""
 
-    renderGenderChart(rows);
-    renderAgeChart(rows);
-    renderTable(rows.slice().reverse().slice(0, 30));
-  }
+## This version
+- Bilingual VI/EN switch added.
+- API_URL already configured:
+  {api_url}
+"""
+readme_path.write_text(readme, encoding="utf-8")
 
-  function renderGenderChart(rows) {
-    const counts = {};
-    rows.forEach(r => counts[r.gender || "Unknown"] = (counts[r.gender || "Unknown"] || 0) + 1);
+zip_path = Path("/mnt/data/yoga_day_landing_bilingual_en_vi.zip")
+with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as z:
+    for p in work_dir.iterdir():
+        z.write(p, arcname=p.name)
 
-    if (genderChart) genderChart.destroy();
-    genderChart = new Chart(document.getElementById("genderChart"), {
-      type: "doughnut",
-      data: {
-        labels: Object.keys(counts),
-        datasets: [{ data: Object.values(counts) }]
-      },
-      options: { responsive: true, plugins: { legend: { position: "bottom" } } }
-    });
-  }
-
-  function ageGroup(age) {
-    age = Number(age);
-    if (!age) return "Unknown";
-    if (age < 18) return "<18";
-    if (age <= 25) return "18-25";
-    if (age <= 35) return "26-35";
-    if (age <= 45) return "36-45";
-    if (age <= 55) return "46-55";
-    return "56+";
-  }
-
-  function renderAgeChart(rows) {
-    const groups = ["<18", "18-25", "26-35", "36-45", "46-55", "56+", "Unknown"];
-    const counts = Object.fromEntries(groups.map(g => [g, 0]));
-    rows.forEach(r => counts[ageGroup(r.age)]++);
-
-    if (ageChart) ageChart.destroy();
-    ageChart = new Chart(document.getElementById("ageChart"), {
-      type: "bar",
-      data: {
-        labels: groups,
-        datasets: [{ label: "Registrations", data: groups.map(g => counts[g]), borderRadius: 10 }]
-      },
-      options: {
-        responsive: true,
-        scales: { y: { beginAtZero: true, ticks: { precision: 0 } } },
-        plugins: { legend: { display: false } }
-      }
-    });
-  }
-
-  function maskPhone(phone) {
-    phone = String(phone || "");
-    if (phone.length < 6) return phone;
-    return phone.slice(0,3) + "****" + phone.slice(-3);
-  }
-
-  function renderTable(rows) {
-    const body = document.getElementById("tableBody");
-    body.innerHTML = rows.map(r => `
-      <tr class="border-t border-slate-100">
-        <td class="py-2 whitespace-nowrap">${r.timestamp || ""}</td>
-        <td class="py-2 font-bold">${r.fullName || ""}</td>
-        <td class="py-2">${maskPhone(r.phone)}</td>
-        <td class="py-2">${r.memberCode || "-"}</td>
-        <td class="py-2">${r.gender || ""}</td>
-        <td class="py-2">${r.age || ""}</td>
-      </tr>
-    `).join("");
-  }
-</script>
-</body>
-</html>
+zip_path.as_posix()
