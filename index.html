@@ -33,6 +33,10 @@
       overflow-x: hidden;
     }
 
+    @media (min-width: 981px) {
+      body { overflow: hidden; }
+    }
+
     body::before {
       content: "";
       position: fixed;
@@ -43,15 +47,17 @@
     }
 
     .page {
+      height: 100svh;
       min-height: 100svh;
       position: relative;
-      padding: clamp(22px, 2.6vw, 44px);
+      padding: clamp(14px, 1.8vw, 28px);
       isolation: isolate;
+      overflow: hidden;
     }
 
     .brand-logo {
       position: absolute;
-      top: clamp(26px, 4.6vh, 52px);
+      top: clamp(20px, 3.6vh, 40px);
       left: clamp(34px, 5vw, 88px);
       display: flex;
       align-items: center;
@@ -59,7 +65,7 @@
     }
 
     .brand-logo img {
-      width: clamp(210px, 20vw, 360px);
+      width: clamp(180px, 17vw, 300px);
       height: auto;
       object-fit: contain;
       filter: drop-shadow(0 12px 24px rgba(15,23,42,.10));
@@ -72,7 +78,7 @@
 
     .lang-switch {
       position: absolute;
-      top: clamp(30px, 4.8vh, 58px);
+      top: clamp(22px, 3.8vh, 42px);
       right: clamp(28px, 4.2vw, 76px);
       display: flex;
       gap: 6px;
@@ -107,28 +113,32 @@
     }
 
     .main-stage {
-      min-height: calc(100svh - clamp(36px, 5vw, 84px));
-      width: 100%;
-      max-width: 1500px;
-      margin: 0 auto;
+      --ui-scale: .82;
+      min-height: calc(100svh / var(--ui-scale));
+      width: calc(100% / var(--ui-scale));
+      max-width: calc(1600px / var(--ui-scale));
+      margin-left: calc((100% - (100% / var(--ui-scale))) / 2);
+      margin-right: 0;
       display: grid;
-      grid-template-columns: minmax(540px, 620px) minmax(460px, 520px);
+      grid-template-columns: minmax(600px, 700px) minmax(460px, 540px);
       justify-content: center;
       align-items: start;
-      gap: clamp(46px, 5.5vw, 92px);
-      padding-top: clamp(118px, 13vh, 156px);
+      gap: clamp(34px, 4.4vw, 72px);
+      padding-top: clamp(92px, 10vh, 118px);
+      transform: scale(var(--ui-scale));
+      transform-origin: top center;
     }
 
 
 
     .hero-context {
       width: 100%;
-      max-width: 620px;
+      max-width: 700px;
       min-height: auto;
       display: flex;
       align-items: flex-start;
       justify-self: start;
-      padding-top: clamp(82px, 8vh, 100px);
+      padding-top: clamp(54px, 5.5vh, 74px);
     }
 
     .event-copy {
@@ -153,14 +163,16 @@
       font-size: clamp(19px, 1.65vw, 30px);
       text-transform: uppercase;
       margin-bottom: 12px;
+      justify-content: center;
+      white-space: nowrap;
     }
 
     .event-kicker::before,
     .event-kicker::after {
       content: "";
       height: 2px;
-      flex: 1;
-      max-width: 58px;
+      flex: 0 0 clamp(62px, 6vw, 118px);
+      max-width: none;
       background: currentColor;
       opacity: .8;
     }
@@ -168,7 +180,7 @@
     .event-title {
       color: rgba(70,90,76,.64);
       font-family: Georgia, "Times New Roman", serif;
-      font-size: clamp(92px, 8.5vw, 156px);
+      font-size: clamp(78px, 7.4vw, 132px);
       line-height: .78;
       letter-spacing: .03em;
       font-weight: 500;
@@ -183,7 +195,7 @@
       color: rgba(70,90,76,.66);
       font-weight: 800;
       letter-spacing: .34em;
-      font-size: clamp(34px, 3.4vw, 58px);
+      font-size: clamp(30px, 3vw, 50px);
       text-transform: uppercase;
     }
 
@@ -191,13 +203,14 @@
     .event-day::after {
       content: "";
       height: 2px;
-      flex: 1;
+      flex: 1 1 0;
+      min-width: 0;
       background: #6c9c78;
       opacity: .55;
     }
 
     .event-theme {
-      margin-top: 24px;
+      margin-top: 18px;
       color: rgba(31,41,55,.66);
       font-size: clamp(19px, 1.35vw, 25px);
       line-height: 1.25;
@@ -208,11 +221,11 @@
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 12px;
-      margin-top: 24px;
+      margin-top: 18px;
     }
 
     .event-icon-card {
-      min-height: 94px;
+      min-height: 78px;
       border-radius: 0;
       background: transparent;
       border: 0;
@@ -241,7 +254,7 @@
     }
 
     .event-date {
-      margin-top: 52px;
+      margin-top: 32px;
       padding-top: 0;
       border-top: 0;
       text-align: center;
@@ -265,7 +278,7 @@
 
     .form-zone {
       width: 100%;
-      max-width: 520px;
+      max-width: 500px;
       justify-self: start;
       transform: translateY(0);
     }
@@ -288,7 +301,7 @@
     }
 
     .top-tabs button {
-      min-height: 52px;
+      min-height: 48px;
       border-radius: 22px;
       font-weight: 900;
       transition: all .18s ease;
@@ -313,7 +326,7 @@
       -webkit-backdrop-filter: blur(30px);
       border-radius: 32px;
       box-shadow: 0 40px 100px rgba(15,23,42,.14);
-      padding: clamp(24px, 1.8vw, 30px) clamp(28px, 2.2vw, 36px);
+      padding: clamp(20px, 1.55vw, 26px) clamp(24px, 1.9vw, 32px);
       position: relative;
       z-index: 2;
     }
@@ -329,13 +342,13 @@
 
     input, select {
       background: rgba(255,255,255,.90) !important;
-      min-height: 54px;
+      min-height: 50px;
     }
 
     .field-icon {
-      width: 54px;
-      height: 54px;
-      flex: 0 0 54px;
+      width: 50px;
+      height: 50px;
+      flex: 0 0 50px;
       display: grid;
       place-items: center;
       border-radius: 18px;
@@ -346,17 +359,25 @@
 
     .field-row {
       display: grid;
-      grid-template-columns: 54px 1fr;
+      grid-template-columns: 50px 1fr;
       gap: 14px;
       align-items: end;
     }
 
     .hidden { display: none !important; }
 
+
+    .form-card h3 {
+      font-size: clamp(30px, 3.1vw, 42px) !important;
+    }
+
+    #regForm { row-gap: 12px; }
+
     @media (max-width: 1200px) {
       .main-stage {
-        grid-template-columns: minmax(460px, 540px) minmax(430px, 500px);
-        gap: 42px;
+        --ui-scale: .78;
+        grid-template-columns: minmax(520px, 620px) minmax(430px, 500px);
+        gap: 34px;
         justify-content: center;
       }
 
@@ -376,6 +397,8 @@
       }
 
       .page {
+        height: auto;
+        overflow: visible;
         padding: 16px;
       }
 
@@ -399,9 +422,12 @@
 
       .main-stage {
         display: block;
+        width: 100%;
         max-width: 560px;
         min-height: auto;
+        margin: 0 auto;
         padding-top: 18px;
+        transform: none;
       }
 
       .left-space {
@@ -413,9 +439,16 @@
       }
 
       .hero-context {
+        max-width: 100%;
         min-height: auto;
         padding-top: 0;
       }
+
+      .event-title { font-size: clamp(64px, 18vw, 96px); }
+      .event-kicker { font-size: clamp(14px, 4vw, 20px); letter-spacing: .24em; }
+      .event-day { font-size: clamp(24px, 7vw, 38px); }
+      .event-kicker::before,
+      .event-kicker::after { flex-basis: 48px; }
 
       .form-zone {
         max-width: 560px;
@@ -448,7 +481,7 @@
       }
 
       .top-tabs button {
-        min-height: 52px;
+        min-height: 48px;
       }
 
       .form-card {
