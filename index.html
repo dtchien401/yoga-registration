@@ -10,6 +10,8 @@
   <style>
     * { box-sizing: border-box; }
 
+    html { font-size: clamp(14px, 1vw, 16px); }
+
     :root {
       --green: #2f754b;
       --green-dark: #245c3b;
@@ -22,7 +24,7 @@
       font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       color: var(--ink);
       background:
-        linear-gradient(90deg, rgba(255,255,255,.18) 0%, rgba(255,255,255,.16) 45%, rgba(255,255,255,.10) 100%),
+        linear-gradient(90deg, rgba(255,255,255,.38) 0%, rgba(255,255,255,.26) 48%, rgba(255,255,255,.14) 100%),
         url('./background.png');
       background-size: cover;
       background-position: center center;
@@ -35,7 +37,7 @@
       content: "";
       position: fixed;
       inset: 0;
-      background: rgba(255,255,255,.24);
+      background: rgba(255,255,255,.34);
       pointer-events: none;
       z-index: -1;
     }
@@ -49,36 +51,23 @@
 
     .brand-logo {
       position: absolute;
-      top: clamp(24px, 5vh, 64px);
-      left: clamp(28px, 6vw, 110px);
+      top: clamp(24px, 5vh, 56px);
+      left: clamp(24px, 5vw, 86px);
       display: flex;
       align-items: center;
-      gap: 14px;
       z-index: 20;
     }
 
     .brand-logo img {
-      width: clamp(58px, 5vw, 82px);
-      height: clamp(58px, 5vw, 82px);
+      width: clamp(220px, 22vw, 420px);
+      height: auto;
       object-fit: contain;
-      border-radius: 999px;
-      filter: drop-shadow(0 10px 20px rgba(15,23,42,.10));
+      filter: drop-shadow(0 12px 24px rgba(15,23,42,.10));
     }
 
-    .brand-logo-text {
-      line-height: 1.1;
-      letter-spacing: .18em;
-      color: #285b43;
-      font-weight: 900;
-      font-size: clamp(16px, 1.4vw, 24px);
-    }
-
+    .brand-logo-text,
     .brand-logo-sub {
-      letter-spacing: .32em;
-      font-weight: 600;
-      font-size: clamp(10px, .82vw, 14px);
-      color: #475569;
-      margin-top: 6px;
+      display: none;
     }
 
     .lang-switch {
@@ -123,7 +112,7 @@
       max-width: 1500px;
       margin: 0 auto;
       display: grid;
-      grid-template-columns: minmax(440px, 1fr) minmax(460px, 520px) minmax(260px, .66fr);
+      grid-template-columns: 1fr minmax(500px, 560px) .55fr;
       align-items: center;
       gap: clamp(14px, 2vw, 30px);
       padding-top: clamp(92px, 10vh, 150px);
@@ -134,9 +123,9 @@
 
     .form-zone {
       width: 100%;
-      max-width: 520px;
+      max-width: 560px;
       justify-self: center;
-      transform: translateY(8px);
+      transform: translateY(-4px);
     }
 
     .top-tabs {
@@ -178,10 +167,10 @@
       width: 100%;
       background: rgba(255,255,255,.84);
       border: 1px solid rgba(255,255,255,.84);
-      backdrop-filter: blur(24px);
-      -webkit-backdrop-filter: blur(24px);
+      backdrop-filter: blur(30px);
+      -webkit-backdrop-filter: blur(30px);
       border-radius: 32px;
-      box-shadow: 0 28px 70px rgba(15,23,42,.17);
+      box-shadow: 0 40px 100px rgba(15,23,42,.14);
       padding: clamp(24px, 2vw, 32px);
       position: relative;
       z-index: 2;
@@ -224,7 +213,7 @@
 
     @media (max-width: 1200px) {
       .main-stage {
-        grid-template-columns: minmax(360px, 1fr) minmax(440px, 520px) minmax(160px, .5fr);
+        grid-template-columns: .9fr minmax(480px, 540px) .4fr;
       }
 
       .brand-logo {
@@ -254,8 +243,8 @@
       }
 
       .brand-logo img {
-        width: 54px;
-        height: 54px;
+        width: min(58vw, 280px);
+        height: auto;
       }
 
       .lang-switch {
@@ -348,8 +337,8 @@
         <div class="form-card">
           <section id="tabRegister">
             <div class="text-center mb-6">
-              <h3 class="text-3xl md:text-4xl font-black brand-green" data-i18n="formTitle">Đăng ký tham gia</h3>
-              <p class="text-lg brand-green mt-1 font-semibold">REGISTER TO JOIN</p>
+              <h3 class="text-[34px] md:text-[42px] font-black brand-green tracking-tight leading-tight" data-i18n="formTitle">Đăng ký tham gia</h3>
+              <p class="text-base brand-green mt-2 font-medium tracking-[0.12em]">REGISTER TO JOIN</p>
               <div class="w-12 h-1 bg-[#2f754b] mx-auto mt-4 rounded-full"></div>
             </div>
 
